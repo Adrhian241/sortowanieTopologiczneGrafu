@@ -32,49 +32,49 @@ void Graf::print()
 }
 void Graf::dodajKrawedz(int u, int v)
 {
-	if (u >= 0 && u <= liczbaWierzcholkow && v >= 0 && v <= liczbaWierzcholkow)
+	if (u >= 0 && u < liczbaWierzcholkow && v >= 0 && v < liczbaWierzcholkow)
 	{
 		macierzSasiedztwa[u][v] = 1;
 	}
 }
 bool Graf::DFS(int v, int* odwiedzone, int* porzadekTopologiczny, int& indeks) {
-	odwiedzone[v] = 1; // wierzcho³ek jest w trakcie odwiedzania (on stack)
+	odwiedzone[v] = 1; // wierzchoÅ‚ek jest w trakcie odwiedzania (on stack)
 
-	// Odwiedzamy wszystkich s¹siadów
+	// Odwiedzamy wszystkich sÄ…siadÃ³w
 	for (int i = 0; i <liczbaWierzcholkow; i++) {
-		if (macierzSasiedztwa[v][i] == 1) { // sprawdzamy krawêdŸ
+		if (macierzSasiedztwa[v][i] == 1) { // sprawdzamy krawÄ™dÅº
 			if (odwiedzone[i] == 1) {
-				return true; // cykl znaleziony (wracamy do wierzcho³ka w trakcie odwiedzania)
+				return true; // cykl znaleziony (wracamy do wierzchoÅ‚ka w trakcie odwiedzania)
 			}
 			if (odwiedzone[i] == 0 && DFS(i, odwiedzone, porzadekTopologiczny, indeks)) {
 				return true; // cykl znaleziony w rekursji
 			}
 		}
 	}
-	odwiedzone[v] = 2; // wierzcho³ek ca³kowicie odwiedzony
-	porzadekTopologiczny[indeks++] = v; // dodajemy wierzcho³ek do porz¹dku topologicznego
+	odwiedzone[v] = 2; // wierzchoÅ‚ek caÅ‚kowicie odwiedzony
+	porzadekTopologiczny[indeks++] = v; // dodajemy wierzchoÅ‚ek do porzÄ…dku topologicznego
 	return false;
 }
 bool Graf::sortowanieTopologiczne() {
 	int* porzadekTopologiczny = new int[liczbaWierzcholkow];
 	int* odwiedzone = new int[liczbaWierzcholkow];
-	int indeks = 0; // indeks do zapisywania w porz¹dku topologicznym
+	int indeks = 0; // indeks do zapisywania w porzÄ…dku topologicznym
 	for (int i = 0; i < liczbaWierzcholkow; i++) {
-		odwiedzone[i] = 0; // wszystkie wierzcho³ki na pocz¹tku s¹ nieodwiedzone
+		odwiedzone[i] = 0; // wszystkie wierzchoÅ‚ki na poczÄ…tku sÄ… nieodwiedzone
 	}
 
-	// Odpalamy DFS dla ka¿dego nieodwiedzonego wierzcho³ka
+	// Odpalamy DFS dla kaÅ¼dego nieodwiedzonego wierzchoÅ‚ka
 	for (int i = 0; i < liczbaWierzcholkow; i++) {
 		if (odwiedzone[i] == 0) {
 			if (DFS(i, odwiedzone, porzadekTopologiczny, indeks)) {
 				delete[] odwiedzone;
 				delete[] porzadekTopologiczny;
-				return true; // jeœli znaleziono cykl, zwracamy true
+				return true; // jeÅ›li znaleziono cykl, zwracamy true
 			}
 		}
 	}
 
-	// Wypisujemy porz¹dek topologiczny (odwrócony porz¹dek zapisany w tablicy)
+	// Wypisujemy porzÄ…dek topologiczny (odwrÃ³cony porzÄ…dek zapisany w tablicy)
 	cout << "Porzadek topologiczny: ";
 	for (int i = liczbaWierzcholkow - 1; i >= 0; i--) {
 		cout << porzadekTopologiczny[i] << " ";
@@ -83,5 +83,5 @@ bool Graf::sortowanieTopologiczne() {
 
 	delete[] odwiedzone;
 	delete[] porzadekTopologiczny;
-	return false; // brak cyklu, sortowanie topologiczne zakoñczone pomyœlnie
+	return false; // brak cyklu, sortowanie topologiczne zakoÅ„czone pomyÅ›lnie
 }
